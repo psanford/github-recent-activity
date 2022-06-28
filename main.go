@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/mmcdole/gofeed"
 )
@@ -14,8 +15,12 @@ func main() {
 		log.Fatalf("Usage: %s <username>", os.Args[0])
 	}
 
+	user := os.Args[1]
+	// optionally trim off github prefix
+	user = strings.TrimPrefix(user, "https://github.com/")
+
 	fp := gofeed.NewParser()
-	url := fmt.Sprintf("https://github.com/%s.atom", os.Args[1])
+	url := fmt.Sprintf("https://github.com/%s.atom", user)
 	feed, err := fp.ParseURL(url)
 	if err != nil {
 		log.Fatalf("Fetch/Parse error for url=%q : %s", url, err)
